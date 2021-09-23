@@ -9,8 +9,13 @@ axios.interceptors.response.use(success => {
         // 什么都不返回，这样请求调用方如果拿不到数据，则代表请求失败。
         return
     }
+
+    if (success.data.msg) {
+        Message.success(success.data.msg)
+    }
+
     // 请求成功的话，直接返回了success.data，这样请求调用的位置，就不用data.data了
-    return success.data
+    return success.data;
 }, error => {
     if (error.response.status === 504 || error.response.status === 404) {
         Message.error("服务器被吃了！o(╯□╰)o")

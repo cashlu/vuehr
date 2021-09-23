@@ -39,10 +39,8 @@ export default {
                     this.postKeyValueRequest("/doLogin", this.loginForm).then(resp => {
                         // 在axios的response拦截器中，已经对response做了处理，如果后端返回错误的话，resp不会有值。
                         if (resp) {
-                            console.log(resp);
                             window.sessionStorage.setItem("user", JSON.stringify(resp.obj))
                             // push可以后退，replace不能回退。这里我们不希望登录后，还能后退到登录页。
-                            // this.$router.push("/home")
                             this.$router.replace("/home")
                         }
                     })
