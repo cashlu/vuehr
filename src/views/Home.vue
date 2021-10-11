@@ -18,22 +18,26 @@
             </el-header>
             <el-container>
                 <el-aside width="200px">
-                    <el-menu
-                        default-active="2"
-                        class="el-menu-vertical-demo"
-                        @open="handleOpen"
-                        @close="handleClose">
-                        <el-submenu index="1">
+                    <!--是否使用 vue-router 的模式，启用该模式会在激活导航时以 index 作为 path 进行路由跳转-->
+                    <el-menu router>
+                        <!--让每个菜单项的内容，和路由数组中的name属性同步-->
+                        <!--遍历routers数组（index.js）,不显示hidden==true的项目-->
+                        <el-submenu index="1"
+                                    v-for="(item, index) in this.$router.options.routes" :key="index"
+                                    v-if="!item.hidden">
                             <template slot="title">
                                 <i class="el-icon-location"></i>
-                                <span>导航一</span>
+                                <span>{{ item.name }}</span>
                             </template>
-                            <el-menu-item index="1-1">选项1</el-menu-item>
-                            <el-menu-item index="1-2">选项2</el-menu-item>
+                            <el-menu-item :index="child.path"
+                                          v-for="(child, childIndex) in item.children"
+                                          :key="childIndex">{{ child.name }}</el-menu-item>
                         </el-submenu>
                     </el-menu>
                 </el-aside>
-                <el-main>Main</el-main>
+                <el-main>
+                    <router-view></router-view>
+                </el-main>
             </el-container>
         </el-container>
     </div>
@@ -68,12 +72,7 @@ export default {
                 });
             }
         },
-        handleOpen(key, keyPath) {
-            console.log(key, keyPath);
-        },
-        handleClose(key, keyPath) {
-            console.log(key, keyPath);
-        }
+
     }
 }
 </script>
