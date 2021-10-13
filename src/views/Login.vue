@@ -7,7 +7,7 @@
             </el-form-item>
             <el-form-item prop="password">
                 <el-input type="password" v-model="loginForm.password" auto-complete="off"
-                          placeholder="请输入密码"></el-input>
+                          placeholder="请输入密码" @keydown.enter.native="submitLogin"></el-input>
             </el-form-item>
             <el-checkbox class="loginRememberMe" v-model="checked"></el-checkbox>
             <el-button type="primary" style="width: 100%" @click="submitLogin">登录</el-button>

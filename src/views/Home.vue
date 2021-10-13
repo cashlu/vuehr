@@ -19,14 +19,15 @@
             <el-container>
                 <el-aside width="200px">
                     <!--是否使用 vue-router 的模式，启用该模式会在激活导航时以 index 作为 path 进行路由跳转-->
-                    <el-menu router>
+                    <el-menu router unique-opened>
                         <!--让每个菜单项的内容，和路由数组中的name属性同步-->
                         <!--遍历routers数组（index.js）,不显示hidden==true的项目-->
-                        <el-submenu index="1"
-                                    v-for="(item, index) in this.$router.options.routes" :key="index"
+                        <!--index加空字符串是因为这里期待字符串，而index是数字-->
+                        <el-submenu :index="index+''"
+                                    v-for="(item, index) in routes" :key="index"
                                     v-if="!item.hidden">
                             <template slot="title">
-                                <i class="el-icon-location"></i>
+                                <i style="color: #409eff; margin-right: 5px" :class="item.iconCls"></i>
                                 <span>{{ item.name }}</span>
                             </template>
                             <el-menu-item :index="child.path"
@@ -63,6 +64,8 @@ export default {
                 }).then(() => {
                     this.getRequest("/logout")
                     window.sessionStorage.removeItem("user")
+                    // 注销时，清空store中存储的路由列表，否则换用户登录后，还是之前的菜单项
+                    this.$store.commit("initRoutes", [])
                     this.$router.replace("/")
                 }).catch(() => {
                     this.$message({
@@ -72,7 +75,11 @@ export default {
                 });
             }
         },
-
+    },
+    computed:{
+        routes(){
+            return this.$store.state.routes
+        }
     }
 }
 </script>
