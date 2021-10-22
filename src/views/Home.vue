@@ -32,11 +32,21 @@
                             </template>
                             <el-menu-item :index="child.path"
                                           v-for="(child, childIndex) in item.children"
-                                          :key="childIndex">{{ child.name }}</el-menu-item>
+                                          :key="childIndex">{{ child.name }}
+                            </el-menu-item>
                         </el-submenu>
                     </el-menu>
                 </el-aside>
                 <el-main>
+                    <el-breadcrumb separator-class="el-icon-arrow-right"
+                                   v-if="this.$router.currentRoute.path!=='/home'">
+                        <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+                        <el-breadcrumb-item>{{ this.$router.currentRoute.name }}</el-breadcrumb-item>
+                    </el-breadcrumb>
+                    <!--首页才显示-->
+                    <div class="homeWelcome"  v-if="this.$router.currentRoute.path==='/home'">
+                        欢迎来到微人事
+                    </div>
                     <router-view></router-view>
                 </el-main>
             </el-container>
@@ -76,8 +86,8 @@ export default {
             }
         },
     },
-    computed:{
-        routes(){
+    computed: {
+        routes() {
             return this.$store.state.routes
         }
     }
@@ -100,7 +110,7 @@ export default {
 
 .homeHeader .title {
     font-size: 30px;
-    font-family: 华文行楷,sans-serif;
+    font-family: 华文行楷, sans-serif;
     color: #ffffff;
 }
 
@@ -120,6 +130,15 @@ export default {
     /*让文字垂直居中，现将父容器定义为flex模式，然后这是居中。*/
     display: flex;
     align-items: center;
+}
+
+.homeWelcome {
+    text-align: center;
+    font-size: 30px;
+    color: #409eff;
+    font-family: 华文行楷,sans-serif;
+    padding-top: 50px;
+
 }
 
 </style>
