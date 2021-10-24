@@ -40,12 +40,16 @@ export default {
                         // 在axios的response拦截器中，已经对response做了处理，如果后端返回错误的话，resp不会有值。
                         if (resp) {
                             window.sessionStorage.setItem("user", JSON.stringify(resp.obj))
+                            // 先判断一下，路径中是否有redirect参数，如果有，说明用户是在未登录前访问某页面，main.js中
+                            // 的导航守卫发现用户没登录，先跳转到登录页面的。这是后如果用户登录成功了，需要自动跳转到redirect
+                            // 参数后面的路径中。
+                            let path = this.$route.query.redirect;
+                            console.log(path);
                             // push可以后退，replace不能回退。这里我们不希望登录后，还能后退到登录页。
-                            this.$router.replace("/home")
+                            this.$router.replace((path === '/' || path === undefined) ? "/home" : path)
                         }
                     })
                 } else {
-                    console.log('error submit!!');
                     this.$message.error("请填写正确的用户名及密码")
                     return false;
                 }

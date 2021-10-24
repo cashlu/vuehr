@@ -5,7 +5,7 @@
                 <div class="title">微人事</div>
                 <el-dropdown @command="commandHandler">
                     <span class="el-dropdown-link">
-                        {{ user.name }}<i><img :src="user.userface" alt="用户头像"></i>
+                        {{ user.name }}<i><img :src="attachImageUrl(user.userface)" alt="用户头像"></i>
                     </span>
                     <el-dropdown-menu slot="dropdown">
                         <!--item的command属性，只是一个标记，不是点击事件，点击事件在上面的el-dropdown标签上。
@@ -83,6 +83,12 @@ export default {
                         message: '已取消注销'
                     });
                 });
+            }
+        },
+        // 图片防盗链问题解决
+        attachImageUrl(srcUrl) {
+            if (srcUrl !== undefined) {
+                return srcUrl.replace(/http\w{0,1}:\/\/p/g, 'https://images.weserv.nl/?url=p')
             }
         },
     },

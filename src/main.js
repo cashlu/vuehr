@@ -27,8 +27,16 @@ router.beforeEach((to, from, next) => {
     if (to.path === '/') {
         next()
     } else {
-        initMenu(router, store)
-        next();
+        // 如果用户已登录，则放行
+        if (window.sessionStorage.getItem("user")) {
+            initMenu(router, store)
+            next();
+        } else {
+            // 如果用户没有登录，先跳转到登录页，登录后，再跳转回用户本来想访问的页面。
+            // 解决的方法是将要跳转的url从to中提取出来，然后拼接在url上，然后登录成功后，
+            // 由Login.vue页面先判断一下，如果有redirect，那么就直接跳转过去。
+            next("/?redirect=" + to.path)
+        }
     }
 })
 
