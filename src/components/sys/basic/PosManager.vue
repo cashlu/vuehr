@@ -13,6 +13,7 @@
         <div class="tableDiv">
             <el-table
                 :data="positions"
+                @selection-change="handleSelectionChange"
                 border
                 stripe
                 size="small"
@@ -46,6 +47,8 @@
                     </template>
                 </el-table-column>
             </el-table>
+            <el-button class="batchDelBtn" type="danger" size="small" @click="batchDeletePos"
+                       :disabled="multipleSelection.length===0">批量删除</el-button>
         </div>
         <el-dialog
             title="修改职位"
@@ -76,6 +79,7 @@ export default {
             updatePos: {
                 name: ""
             },
+            multipleSelection: [],
         }
     },
     methods: {
@@ -130,6 +134,32 @@ export default {
                     this.dialogVisible = false
                 }
             })
+        },
+        handleSelectionChange(val) {
+            this.multipleSelection = val;
+        },
+
+        batchDeletePos() {
+            this.$confirm('此操作将永久删除【'+ this.multipleSelection.length +'】个职位, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                let ids = []
+                for (let i = 0; i < this.multipleSelection.length; i++) {
+                    ids.push(this.multipleSelection[i].id)
+                }
+                this.deleteRequest("/system/basic/pos/", ids).then(resp => {
+                    if (resp.status === 200) {
+                        this.initPositions()
+                    }
+                })
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            });
         }
     },
     mounted() {
@@ -151,6 +181,10 @@ export default {
 .updatePosInput {
     width: 200px;
     margin-left: 10px;
+}
+
+.batchDelBtn {
+    margin-top: 20px;
 }
 
 </style>
