@@ -47,7 +47,7 @@
                     <div class="homeWelcome"  v-if="this.$router.currentRoute.path==='/home'">
                         欢迎来到微人事
                     </div>
-                    <router-view></router-view>
+                    <router-view class="homeRouterView"></router-view>
                 </el-main>
             </el-container>
         </el-container>
@@ -144,7 +144,10 @@ export default {
     color: #409eff;
     font-family: 华文行楷,sans-serif;
     padding-top: 50px;
+}
 
+.homeRouterView{
+    margin-top: 10px;
 }
 
 </style>

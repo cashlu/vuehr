@@ -42,7 +42,6 @@ export const formatRoutes = (routes) => {
             children: children,
             // component需要单独处理一下，因为后端传过来数据是字符串，而routes中是对象。
             component(resolve) {
-                // TODO: 这里可以优化一下，截取component前三位，转换小写后，和路径组装字符串。
                 if (component.startsWith("Emp")) {
                     require(['../views/emp/' + component + '.vue'], resolve);
                 } else if (component.startsWith("Per")) {

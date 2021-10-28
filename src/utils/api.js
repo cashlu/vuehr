@@ -1,7 +1,7 @@
 import axios from "axios";
 import {Message} from "element-ui";
 
-
+// 根据请求的情况，打印后端返回的RespBean.msg，或者这里自定义的错误信息。
 axios.interceptors.response.use(success => {
     if (success.status && success.status === 200 && success.data.status === 500) {
         // 业务错误，例如用户名密码错误
@@ -9,11 +9,9 @@ axios.interceptors.response.use(success => {
         // 什么都不返回，这样请求调用方如果拿不到数据，则代表请求失败。
         return
     }
-
     if (success.data.msg) {
         Message.success(success.data.msg)
     }
-
     // 请求成功的话，直接返回了success.data，这样请求调用的位置，就不用data.data了
     return success.data;
 }, error => {
