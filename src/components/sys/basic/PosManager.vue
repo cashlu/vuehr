@@ -17,7 +17,7 @@
                 border
                 stripe
                 size="small"
-                style="width: 70%">
+                style="width: 100%">
                 <el-table-column type="selection"
                                  width="55">
                 </el-table-column>
@@ -31,9 +31,17 @@
                 </el-table-column>
                 <el-table-column prop="createDate"
                                  label="创建时间"
-                                 width="180">
+                                 width="150">
                 </el-table-column>
-                <el-table-column label="操作">
+                <el-table-column prop="enabled"
+                                 label="是否启用"
+                                 width="100">
+                    <template v-slot="scope">
+                        <el-tag type="success" v-if="scope.row.enabled===true">已启用</el-tag>
+                        <el-tag type="warning" v-else>未启用</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作" width="150">
                     <template slot-scope="scope">
                         <el-button
                             size="mini"
@@ -48,15 +56,36 @@
                 </el-table-column>
             </el-table>
             <el-button class="batchDelBtn" type="danger" size="small" @click="batchDeletePos"
-                       :disabled="multipleSelection.length===0">批量删除</el-button>
+                       :disabled="multipleSelection.length===0">批量删除
+            </el-button>
         </div>
         <el-dialog
             title="修改职位"
             :visible.sync="dialogVisible"
             width="30%">
             <div>
-                <el-tag>职位名称</el-tag>
-                <el-input class="updatePosInput" size="small" v-model="updatePos.name"></el-input>
+                <table>
+                    <tr>
+                        <td>
+                            <el-tag>职位名称</el-tag>
+                        </td>
+                        <td>
+                            <el-input class="updateJobLevelName" size="small" v-model="updatePos.name"></el-input>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <el-tag>启用状态</el-tag>
+                        </td>
+                        <td>
+                            <el-switch class="updateJobLevelEnabled"
+                                       v-model="updatePos.enabled"
+                                       active-color="#13ce66"
+                                       inactive-color="#ff4949">
+                            </el-switch>
+                        </td>
+                    </tr>
+                </table>
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button size="small" @click="dialogVisible = false">取 消</el-button>
@@ -77,7 +106,8 @@ export default {
             positions: [],
             dialogVisible: false,
             updatePos: {
-                name: ""
+                name: "",
+                enabled: null
             },
             multipleSelection: [],
         }
@@ -130,7 +160,8 @@ export default {
             this.putRequest("/system/basic/pos/", this.updatePos).then(resp => {
                 if (resp) {
                     this.initPositions()
-                    this.updatePos = {}
+                    this.updatePos.name = ""
+                    this.updatePos.enabled = null
                     this.dialogVisible = false
                 }
             })
@@ -140,7 +171,7 @@ export default {
         },
 
         batchDeletePos() {
-            this.$confirm('此操作将永久删除【'+ this.multipleSelection.length +'】个职位, 是否继续?', '提示', {
+            this.$confirm('此操作将永久删除【' + this.multipleSelection.length + '】个职位, 是否继续?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'

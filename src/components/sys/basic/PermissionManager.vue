@@ -6,10 +6,21 @@
 
 <script>
 export default {
-    name: "PermissionManager"
+    name: "PermissionManager",
+    data(){
+        return{
+
+        }
+    },
+    methods:{
+
+    },
+    mounted() {
+
+    }
 }
 </script>
 
-<style scoped>
+<style>
 
 </style>
