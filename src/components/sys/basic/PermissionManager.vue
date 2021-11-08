@@ -10,7 +10,7 @@
         <div class="roleCollapse">
             <el-collapse accordion @change="change" v-model="activeName">
                 <el-collapse-item :title=role.nameZh :name="role.id" v-for="(role, index) in roles" :key="index">
-                    <el-card class="box-card">
+                    <el-card class="hrCard">
                         <div slot="header" class="clearfix">
                             <span>可访问资源</span>
                             <el-button style="float: right; padding: 3px 0; color:red" type="text"
@@ -179,7 +179,7 @@ export default {
     clear: both
 }
 
-.box-card {
+.hrCard {
     width: 600px;
 }
 

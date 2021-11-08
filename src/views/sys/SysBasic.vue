@@ -16,7 +16,6 @@
             <el-tab-pane label="权限组" name="PermissionManager">
                 <PermissionManager></PermissionManager>
             </el-tab-pane>
-
         </el-tabs>
     </div>
 </template>
@@ -32,7 +31,7 @@ export default {
     name: "SysBasic",
     data() {
         return {
-            activeName: 'PermissionManager',
+            activeName: 'DepManager',
         }
     },
     methods: {},

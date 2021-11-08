@@ -6,6 +6,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css';
 import {initMenu} from "@/utils/menus";
 import 'font-awesome/css/font-awesome.min.css'
+import 'animate.css';
 
 
 import {postRequest, postKeyValueRequest, getRequest, putRequest, deleteRequest} from "@/utils/api";

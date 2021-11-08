@@ -1,8 +1,12 @@
 import axios from "axios";
 import {Message} from "element-ui";
+import router from "@/router";
+
 
 // 根据请求的情况，打印后端返回的RespBean.msg，或者这里自定义的错误信息。
 axios.interceptors.response.use(success => {
+    // TODO: 巨坑！！！如果后端报500的状态码，这里会拦截掉！其他地方不用判断status===200，
+    //  因为这里放行的，只有200，后端定义的其他状态码，这里都拦截处理了。
     if (success.status && success.status === 200 && success.data.status === 500) {
         // 业务错误，例如用户名密码错误
         Message.error(success.data.msg)
@@ -18,7 +22,12 @@ axios.interceptors.response.use(success => {
     if (error.response.status === 504 || error.response.status === 404) {
         Message.error("服务器被吃了！o(╯□╰)o")
     } else if (error.response.status === 401) {
+        // TODO: 因为在PermissionManager.vue中，change()方法内部会执行两个方法，都是Axios请求。
         Message.error("尚未登录，请登录！")
+        // 跳转到登录页
+        router.replace("/").catch(err => {
+            err
+        })
     } else if (error.response.status === 403) {
         Message.error("权限不足，请联系管理员！")
     } else {
@@ -55,7 +64,7 @@ export const postKeyValueRequest = (url, params) => {
 }
 
 // 发送json格式数据的请求
-export const postRequest = (url, params)=>{
+export const postRequest = (url, params) => {
     return axios({
         method: "post",
         url: `${base}${url}`,
@@ -63,14 +72,14 @@ export const postRequest = (url, params)=>{
     })
 }
 
-export const putRequest = (url, params)=>{
+export const putRequest = (url, params) => {
     return axios({
         method: "put",
         url: `${base}${url}`,
         data: params,
     })
 }
-export const getRequest = (url, params)=>{
+export const getRequest = (url, params) => {
     return axios({
         method: "get",
         url: `${base}${url}`,
@@ -78,7 +87,7 @@ export const getRequest = (url, params)=>{
     })
 }
 
-export const deleteRequest = (url, params)=>{
+export const deleteRequest = (url, params) => {
     return axios({
         method: "delete",
         url: `${base}${url}`,

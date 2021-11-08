@@ -1,6 +1,11 @@
 <template>
     <div>
-        <el-form :rules="rules" ref="loginForm" :model="loginForm" class="loginContainer">
+        <el-form :rules="rules" ref="loginForm" :model="loginForm" class="loginContainer"
+                 v-loading="loading"
+                 element-loading-text="正在登录..."
+                 element-loading-spinner="el-icon-loading"
+                 element-loading-background="rgba(0, 0, 0, 0.8)"
+        >
             <h3 class="loginTitle">系统登录</h3>
             <el-form-item prop="username">
                 <el-input type="text" v-model="loginForm.username" auto-complete="off" placeholder="请输入用户名"></el-input>
@@ -30,13 +35,20 @@ export default {
                 password: "123",
             },
             checked: true,
+            loading: false,
         }
     },
     methods: {
         submitLogin() {
             this.$refs.loginForm.validate((valid) => {
                 if (valid) {
+                    // 展示loading
+                    this.loading = true
+
                     this.postKeyValueRequest("/doLogin", this.loginForm).then(resp => {
+                        // 不论登录成功与否，loading都要关掉
+                        this.loading = false
+
                         // 在axios的response拦截器中，已经对response做了处理，如果后端返回错误的话，resp不会有值。
                         if (resp) {
                             window.sessionStorage.setItem("user", JSON.stringify(resp.obj))
